@@ -35,18 +35,19 @@ Vue.component('product', {
     :disabled="!inStock"
      v-on:click="addToCart" 
      :class = "{disabledButton : !inStock}">Add to Cart</button>
-     <div>
-     <h2>Reviews</h2>
-     <p v-if="!reviews.length"> There are no reviews yet.</p>
-   <ul>
-   <li v-for ="review in reviews">
-   <p> {{review.name}}</p>
-   <p> {{review.review}}</p>
-   <p> {{review.rating}}</p>
-   </li>
-   </ul>
-     </div>
+  
     <button  :class="{disabledButton : cart == 0}" :disabled="cart == 0" @click="removeFronCart" >Remove item</button>
+    <div>
+    <h2>Reviews</h2>
+    <p v-if="!reviews.length"> There are no reviews yet.</p>
+  <ul>
+  <li v-for ="review in reviews">
+  <p> {{review.name}}</p>
+  <p> {{review.review}}</p>
+  <p> {{review.rating}}</p>
+  </li>
+  </ul>
+    </div>
     <product-review @submitted="addReview"></product-review>
     <!-- <a :href="link" target="_blank">link</a> -->
 </div>
