@@ -148,6 +148,7 @@ Vue.component('product-review', {
     }
     ,methods :{
         onSubmit() {
+            this.errors = []
             if(this.name&&this.review && this.rating){
                 let productReview = {
                     name :this.name,
@@ -159,7 +160,7 @@ Vue.component('product-review', {
                 this.rating =  null
                 this.$emit('submitted',productReview)
             }else{
-                this.errors = []
+                
                 if(!this.name) this.errors.push("Name required.")
                 if(!this.review) this.errors.push("Review required.")
                 if(!this.rating) this.errors.push("Rating required.")
