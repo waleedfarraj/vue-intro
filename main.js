@@ -35,8 +35,8 @@ Vue.component('product', {
     :disabled="!inStock"
      v-on:click="addToCart" 
      :class = "{disabledButton : !inStock}">Add to Cart</button>
+     <button  :class="{disabledButton : cart == 0}" :disabled="cart == 0" @click="removeFronCart" >Remove item</button>
   
-    <button  :class="{disabledButton : cart == 0}" :disabled="cart == 0" @click="removeFronCart" >Remove item</button>
     <div>
     <h2>Reviews</h2>
     <p v-if="!reviews.length"> There are no reviews yet.</p>
