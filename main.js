@@ -49,7 +49,7 @@ Vue.component('product', {
   </ul>
     </div>
     <product-review @submitted="addReview"></product-review>
-    <!-- <a :href="link" target="_blank">link</a> -->
+  
 </div>
 </div>`
     , data() {
