@@ -11,47 +11,54 @@ Vue.component('product', {
             required: true
         }
     }
-    , template: ` <div class="product">
-    <div class="product-image">
-    <img :src="image" :alt="description"  >
-</div>
-<div class="product-info">
-    <h1>{{title}}</h1>
-    <p v-if="onSale">SALE!!!{{sale}}</p>
-    <p v-if="inStock">in Stock</p>
-    <p v-else :class ="{scratched : !inStock}" >Out of stock</p>
-    <P>shipping :{{shipping}}</P>
-    <ul>
-        <li v-for="detail in details">{{detail}}</li>
-
-    </ul>
-    <div v-for="(variant,index) in variants" 
-    :key="variant.variantId"
-    class="color-box"
-    :style="{backgroundColor:variant.variantColor}"
-    @mouseover="switchImg(index)">
-    </div>
-    <button 
-    :disabled="!inStock"
-     v-on:click="addToCart" 
-     :class = "{disabledButton : !inStock}">Add to Cart</button>
+    , template: `
+      <div>
+        <div class="product">
+         <div class="product-image">
+         
+         <img :src="image" :alt="description"  >
+        
+         </div>
+        <div class="product-info">
+          <h1>{{title}}</h1>
+          <p v-if="onSale">SALE!!!{{sale}}</p>
+          <p v-if="inStock">in Stock</p>
+          <p v-else :class ="{scratched : !inStock}" >Out of stock</p>
+          <P>shipping :{{shipping}}</P>
+          <ul>
+            <li v-for="detail in details">{{detail}}</li>
+          </ul>
+          <div class="picker">
+          <div  v-for="(variant,index) in variants" 
+          :key="variant.variantId"
+          class="color-circle"
+          :style="{backgroundColor:variant.variantColor}"
+          @mouseover="switchImg(index)">
+          </div>
+          </div>
+      <button 
+        :disabled="!inStock"
+        v-on:click="addToCart" 
+        :class = "{disabledButton : !inStock}">Add to Cart
+      </button>
+     <button  :class="{disabledButton : cart == 0}" :disabled="cart == 0" @click="removeFronCart" >Remove item</button>
   
-    <button  :class="{disabledButton : cart == 0}" :disabled="cart == 0" @click="removeFronCart" >Remove item</button>
-    <div>
-    <h2>Reviews</h2>
-    <p v-if="!reviews.length"> There are no reviews yet.</p>
-  <ul>
-  <li v-for ="review in reviews">
-  <p> {{review.name}}</p>
-  <p> {{review.review}}</p>
-  <p> {{review.rating}}</p>
-  </li>
-  </ul>
-    </div>
-    <product-review @submitted="addReview"></product-review>
-    <!-- <a :href="link" target="_blank">link</a> -->
 </div>
-</div>`
+</div>
+<div id="review-section">
+<div >
+<h2>Reviews</h2>
+<p v-if="!reviews.length"> There are no reviews yet.</p>
+
+<div class="review-container" >
+<Each-Review v-for ="review in reviews" :review="review"></Each-Review>
+</div>
+
+</div>
+<product-review @submitted="addReview"></product-review>
+</div>
+</div>
+    `
     , data() {
 
         return {
@@ -63,7 +70,7 @@ Vue.component('product', {
             inStock: true,
             details: ["80% cotton", "20% ployster", "gender-natural"],
             onSale: false,
-            reviews:[],
+            reviews: [],
             variants: [{ variantColor: 'green', variantId: "4822", variantImage: "./assets/vmSocks-green-onWhite.jpg" },
             { variantColor: 'blue', variantId: "4823", variantImage: "./assets/vmSocks-blue-onWhite.jpg" }],
         }
@@ -81,7 +88,7 @@ Vue.component('product', {
         removeFronCart: function () {
             this.$emit('take-from', this.variants[this.selectedVariant].variantId)
         },
-        addReview(productReview){
+        addReview(productReview) {
             this.reviews.push(productReview)
             console.log(this.reviews);
         }
@@ -133,7 +140,7 @@ Vue.component('product-review', {
           <option>1</option>
         </select>
     </p>
-    <button type="submit"> Submit </button>
+    <button class="form-button" type="submit"> Submit </button>
     </form>
 
     
@@ -143,30 +150,31 @@ Vue.component('product-review', {
             name: null,
             review: null,
             rating: null,
-            errors: [] 
+            errors: []
         }
     }
-    ,methods :{
+    , methods: {
         onSubmit() {
-            if(this.name&&this.review && this.rating){
+            this.errors = []
+            if (this.name && this.review && this.rating) {
                 let productReview = {
-                    name :this.name,
-                    review:this.review,
-                    rating:this.rating
+                    name: this.name,
+                    review: this.review,
+                    rating: this.rating
                 }
                 this.name = null
                 this.review = null
-                this.rating =  null
-                this.$emit('submitted',productReview)
-            }else{
-                this.errors = []
-                if(!this.name) this.errors.push("Name required.")
-                if(!this.review) this.errors.push("Review required.")
-                if(!this.rating) this.errors.push("Rating required.")
+                this.rating = null
+                this.$emit('submitted', productReview)
+            } else {
+
+                if (!this.name) this.errors.push("Name required.")
+                if (!this.review) this.errors.push("Review required.")
+                if (!this.rating) this.errors.push("Rating required.")
 
 
             }
-        
+
         }
     }
 })
@@ -175,7 +183,7 @@ var app = new Vue({
     data: {
         premium: true,
         cart: [],
-        
+
 
     },
     methods: {
@@ -195,7 +203,29 @@ var app = new Vue({
             }
         }
     },
-  
 
 
+
+})
+// indvidual review componant
+Vue.component('Each-Review', {
+    template: `  <div class="card review-cards">
+    <p class="card-header">  {{review.name}}</p>
+    <p class="card-text"> {{review.review}}</p>
+    <p class="card-footer"> <star v-for="n in review.rating" ></star></p>
+    </div> 
+    `,
+    props: {
+        review: {
+            type: Object,
+            required: true
+        }
+    },
+})
+// star component
+Vue.component('Star', {
+    template: `<span class="fa fa-star checked"></span>`,
+    props: {
+
+    }
 })
