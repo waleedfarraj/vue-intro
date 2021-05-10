@@ -47,7 +47,7 @@ Vue.component('product', {
 </div>
 <div id="review-section">
 <div>
-<h2>Reviews</h2>
+<h2>Reviews </h2>
 <p v-if="!reviews.length"> There are no reviews yet.</p>
 
 <div class="review-container" >
