@@ -48,15 +48,7 @@ body {
   .picker > * {
     margin: 0 5px;
   }
-  #vue{
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 200px;
-    height: 150px;
-    transform: rotateX(60deg);
-    border: none;
-  }
+
   .product-image {
     width: 80%;
   }
@@ -167,6 +159,9 @@ text-transform: capitalize;
   flex-direction: row;
   width: 100%;
   justify-content: space-around;
+}
+#review-section>h2{
+  color: white;
 }
 #review-section>div{
   color:black;
